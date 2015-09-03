@@ -112,6 +112,7 @@ Exemple de code:
 	 - `waitForFinal`: Si `true` alors seule une reconnaissance **complète** est autorisée. Si `false` alors on peut utiliser une reconnaissance **partielle**. Vaut `true` par défaut.
 	 - `usePartialAfterTimeout`: Si `true` alors, en cas de timeout parce qu'il n'y a pas de phrase reconnue **complètement**, on autorise l'utilisation des bribes de phrase reconnues **partiellement** (c'est un peu l'option de la dernière chance). Si `false` alors on ne donne pas la possibilité d'utiliser ce qui a été reconnu **partiellement** en cas de timeout. Vaut `true` par défaut
 	 - `partialThreshold`: flottant indiquant l'indice de confiance minimum à considérer si `waitForFinal` est égal à `false` ou que `usePartialAfterTimeout` est `true` et que donc on utilise la reconnaissance partielle. Vaut 0.8 par défaut.
+  
   Exemple:
   ```javascript
   q = "Est-ce que l'animal auquel tu penses possède des ailes ?";
@@ -127,16 +128,20 @@ Exemple de code:
 						} else if (answer=="stop") {
 							// traiter le fait qu'on a demandé d'arrêter de jouer
 						} else if (answer==false) {
-							// si on arrive ici c'est qu'on a répondu quelque chose qui n'a pas été compris par le scribe/google
+							// si on arrive ici c'est qu'on a répondu quelque chose 
+							// qui n'a pas été compris par le scribe/google
 						} else {
-							// si on arrive ici c'est qu'on n'a rien répondu (typeof answer === 'undefined')
+							// si on arrive ici c'est qu'on n'a rien répondu
+							// car en fait (typeof answer === 'undefined')
 						}
 				}, 
-			{'timeout':15000, 	// on demande 15 sec de trimeou
-			'retryIfNoMatch': "Je ne suis pas sûr d'avoir compris. Peux-tu répéter ? " + q, // si on n'a pas répondu, on explique puis on répète la question
+			{'timeout':15000, 	// on demande 15 sec de timeout
+			// si on n'a pas répondu, on explique puis on répète la question
+			'retryIfNoMatch': "Je ne suis pas sûr d'avoir compris. Peux-tu répéter ? " + q, 
 			'essais': 2, 		// on a droit à deux essais
 			waitForFinal: false, 		// on autorise le traitement des réponses partielles
-			partialThreshold: 0.01 		// avec un taux de confidence de 1% ! (c'est le plus bas possible !)
+										// avec un taux de confidence de 1% ! 
+			partialThreshold: 0.01 		// (c'est le plus bas possible !)
 			}
 	);
   ```
