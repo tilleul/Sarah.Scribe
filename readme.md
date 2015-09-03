@@ -117,8 +117,12 @@ Exemple de code:
   ```javascript
   q = "Est-ce que l'animal auquel tu penses possède des ailes ?";
   ScribeAskMe(q, [
+				// le regex suivant permet de dire "sarah je ne joue pas" ou "je ne joue plus"
 				 {'regex': /(joue plus|joue pas)/i, 'answer':'stop'},
+				 // le regex suivant permet de dire "oui","d'accord","correct","ok","exact","juste"
+				 // et sera considéré comme équivalent à "oui"
 				 {'regex': /(oui|correct|juste|exact|accord|ok)/, 'answer':'oui'},
+				 // le regex suivant permet de réagir à "non" ou à "il n'a PAS d'ailes"
 				 {'regex': /(non|pas)/, 'answer':'non'}
 				], function(answer,phrase,match,wholeMatch) {
 						if (answer=='oui') {
