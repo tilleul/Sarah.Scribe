@@ -1,16 +1,11 @@
 PLUGIN: SCRIBE
 ==============
-Le plugin Scribe (pour Sarah) permet d'utiliser la reconnaissance vocale HTML5 de Google, à travers Google Chrome.
-
-Le plugin crée un serveur HTTPS qui héberge une page liée au moteur de reconnaissance vocale HTML5 de Google.
-
-Toute phrase prononcée dans le micro est à la fois interprétée par Sarah (et ses grammaires XML) et la page HTTPS.
-
-La page HTTPS envoie au plugin Scribe tout ce qu'elle reconnait comme mots (y compris durant la phase de reconnaissance "partielle").
-
-Le plugin Scribe offre des facilités pour utiliser ce que Google a reconnu comme phrase afin d'exploiter Google dans des plugins tiers.
-
-En bonus, le plugin Scribe écrit dans une zone de la page HTTPS quel est le plugin actif mais aussi ce que Sarah a dit en surlignant les mots qui sont prononcés au fur et à mesure (le timing de cette partie est à régler indépendamment et est totalement expérimental) et en animant un petit visage formé de smileys ... :-)
+- Le plugin Scribe (pour Sarah) permet d'utiliser la reconnaissance vocale HTML5 de Google, à travers Google Chrome.
+- Le plugin crée un serveur HTTPS qui héberge une page liée au moteur de reconnaissance vocale HTML5 de Google.
+- Toute phrase prononcée dans le micro est à la fois interprétée par Sarah (et ses grammaires XML) et la page HTTPS.
+- La page HTTPS envoie au plugin Scribe tout ce qu'elle reconnait comme mots (y compris durant la phase de reconnaissance "partielle").
+- Le plugin Scribe offre des facilités pour utiliser ce que Google a reconnu comme phrase afin d'exploiter Google dans des plugins tiers.
+- En bonus, le plugin Scribe écrit dans une zone de la page HTTPS quel est le plugin actif mais aussi ce que Sarah a dit en surlignant les mots qui sont prononcés au fur et à mesure (le timing de cette partie est à régler indépendamment et est totalement expérimental) et en animant un petit visage formé de smileys ... :-)
 
 Prérequis
 ---------
