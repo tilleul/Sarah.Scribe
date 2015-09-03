@@ -78,6 +78,33 @@ Exemple de code:
   - il coupe le micro avant vocalisation afin d'éviter que Google n'interprête ce que Sarah dit comme étant quelque chose qu'un humain aurait dit
   - il rétablit le micro après la vocalisation
 
+- `ScribeAskMe(question, reponses, callback, options)`: remplace la fonction `SARAH.askme()`. Paramètres:
+  - `question`: la question a poser (chaine de caractères)
+  - `reponses`: un array de la forme `[{'regex': regexp, 'match_number': number, 'answer': object}, {...}]`. 
+    - Les phrases reconnues par Google sont comparées avec une expression **regex** en utilisant la méthode JS **match()**. 
+	- L'expression regex se place dans le paramètre `regex`, 
+	- le n° de l'item à **matcher** se place dans `match_number` (la fonction `match()` peut renvoyer plusieurs résultats sous forme d'un array, `match_number` contient le n° de l'item à considérer).
+	- s'il y a un match, le Scribe renverra l'objet associé à `answer`
+  - `callback` est la fonction `callback` de rappel sous la forme `callback(answer,match,phrase)`. Avec
+    - `answer`: l'objet définit dans `reponses` s'il y a eu un match, ou bien `false` si il n'y a pas eu de match ou bien `undefined` s'il n'y a pas eu de réponse
+	- `match`: le bout de phrase qui a été trouvé par le regex
+	- `phrase`: la phrase reconnue par Google et qui a servi au traitement regex `match()`
+  - `options`: un objet `{}` comprenant les paramètres optionnels suivants:
+     - `timeout`: nombre de millisecondes avant de considérer qu'on n'a pas répondu à la question. 10000 par défaut.
+	 - `essais`: nombre d'essais autorisés en cas de timeout ou en cas de réponse ne contenant pas ce qu'on cherche (si l'option `retryIfNoMatch` est à `true`). Par défaut égal à 1.
+	 - `repeter`: s'il nous reste des essais et **qu'on a atteint le timout**, on a la possibilité de faire répéter la question ou de la formuler autrement. Vaut `true` par défaut. Valeurs autorisées:
+	   - `true` alors, s'il nous reste des essais, la `question` est répétée quand on atteint le timeout 
+	   - `false`: la question n'est pas répétee
+	   - Si contient une chaine de caractères, alors cette chaine est vocalisée plutôt que de répéter la question
+	 - 'retryIfNoMatch`: s'il nous reste des essais et qu'une phrase a été reconnue mais qu'on n'a pas trouvé de match, on a la possibilité de faire répéter la question ou de la formuler autrement. Cette option est similaire à `repeter` mais intervient uniquement en cas de non-match. Vaut `false` par défaut. Valeurs autorisées:
+	   - `true`: la `question` originale est répétée  
+	   - `false`: la question n'est pas répétée
+	   - Si contient une chaine de caractères, alors cette chaine est vocalisée pluttôt que de répéter la question
+	 - `waitForFinal`: Si `true` alors seule une reconnaissance **complète** est autorisée. Si `false` alors on peut utiliser une reconnaissance **partielle**. Vaut `true` par défaut.
+	 - 'usePartialAfterTimeout`: Si `true` alors, en cas de timeout parce qu'il n'y a pas de phrase reconnue **complètement**, on autorise l'utilisation des bribes de phrase reconnues **partiellement** (c'est un peu l'option de la dernière chance). Si `false` alors on ne donne pas la possibilité d'utiliser ce qui a été reconnu **partiellement** en cas de timeout. Vaut `true` par défaut
+	 - `partialThreshold`: flottant indiquant l'indice de confiance minimum à considérer si `waitForFinal` est égal à `false` ou que `usePartialAfterTimeout` est `true` et que donc on utilise la reconnaissance partielle. Vaut 0.8 par défaut.
+	 
+  
 
 Avantages
 ---------
