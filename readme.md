@@ -79,7 +79,7 @@ Dites:
 	- Sarah vous demande votre prénom et vous salue, puis Sarah demande votre âge
 	- du moment que votre réponse contient un nombre elle sera comprise par Sarah (ex: "22 ans" ou "je suis âgé de 22 ans" ou "j'ai 22 ans", "j'ai eu 22 ans hier", etc)
 	
-	
+N'hésitez pas à lire le code source pour vous familiariser avec les possibilités du Scribe.
 #### Poils aux doigts
 Voici encore un plugin totalement inutile. 
 
