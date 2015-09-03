@@ -1,7 +1,7 @@
 PLUGIN: SCRIBE
 ==============
 - Le plugin Scribe (pour Sarah) permet d'utiliser la reconnaissance vocale HTML5 de Google, à travers Google Chrome.
-- Le plugin crée un serveur HTTPS qui héberge une page liée au moteur de reconnaissance vocale HTML5 de Google.
+- Le plugin crée un serveur HTTPS **local** qui héberge une page liée au moteur de reconnaissance vocale HTML5 de Google et ouvre Google Chrome directement sur cette page
 - Toute phrase prononcée dans le micro est à la fois interprétée par Sarah (et ses grammaires XML) et la page HTTPS.
 - La page HTTPS envoie au plugin Scribe tout ce qu'elle reconnait comme mots (y compris durant la phase de reconnaissance "partielle").
 - Le plugin Scribe offre des facilités pour utiliser ce que Google a reconnu comme phrase afin d'exploiter Google dans des plugins tiers.
@@ -14,22 +14,22 @@ Prérequis
 
 Installation
 ------------
-1- copiez le répertoire `scribe` dans le répertoire `plugins` de Sarah
-1bis - installez éventuellement l'un ou l'autre plugin exemple (voir plus bas)
-2- lancez Sarah (serveur+client)
-3- Google Chrome s'ouvre sur la page `https://127.0.0.1:4300` (<-- HTTPS !!)
-4- confirmez l'exception de sécurité
-5- au besoin confirmez l'utilisation du micro (cette étape ne sera plus jamais demandée car on est en HTTPS)
-6- dans Chrome, appuyez sur ALT-F pour ouvrir le menu de Chrome, puis choisissez `Paramètres` (5e avant la fin)
-7- allez tout en bas de la page des Paramètres et cliquez sur `Afficher les paramètres avancés`
-8- cliquez sur le bouton `Gérer les certificats' dans la section HTTPS/SSL (vers la fin)
-9- choisissez l'onglet `autorités de certification RACINES de confiance`
-10- cliquez sur le bouton `importer` puis sur le bouton `suivant`, puis sur le bouton `parcourir`
-11- dans la fenêtre qui s'ouvre choisissez `Certificats PKCS#7` dans la liste déroulante en bas à droite (au dessus du bouton `ouvrir`)
-12- sélectionnez le fichier `sarah_chrome.p7b` qui est dans le répertoire du plugin et cliquez sur le bouton `ouvrir`
-13- cliquez sur `suivant` deux fois, puis sur `terminer`
+1. copiez le répertoire `scribe` dans le répertoire `plugins` de Sarah
+2. installez éventuellement l'un ou l'autre plugin exemple (voir plus bas)
+3. lancez Sarah (serveur+client)
+4. Google Chrome s'ouvre sur la page `https://127.0.0.1:4300` (<-- HTTPS !!)
+5. confirmez l'exception de sécurité
+6. au besoin confirmez l'utilisation du micro (cette étape ne sera plus jamais demandée car on est en HTTPS)
+7. dans Chrome, appuyez sur ALT-F pour ouvrir le menu de Chrome, puis choisissez `Paramètres` (5e avant la fin)
+8. allez tout en bas de la page des Paramètres et cliquez sur `Afficher les paramètres avancés`
+9. cliquez sur le bouton `Gérer les certificats' dans la section HTTPS/SSL (vers la fin)
+10. choisissez l'onglet `autorités de certification RACINES de confiance`
+11. cliquez sur le bouton `importer` puis sur le bouton `suivant`, puis sur le bouton `parcourir`
+12. dans la fenêtre qui s'ouvre choisissez `Certificats PKCS#7` dans la liste déroulante en bas à droite (au dessus du bouton `ouvrir`)
+13. sélectionnez le fichier `sarah_chrome.p7b` qui est dans le répertoire du plugin et cliquez sur le bouton `ouvrir`
+14. cliquez sur `suivant` deux fois, puis sur `terminer`
 
-Les étapes 6 à 13 ne sont à effectuer qu'une seule fois et permettent que Chrome n'émette plus d'avertissement (étape 4), la prochaine fois que vous lancerez Sarah
+Les étapes 7 à 14 ne sont à effectuer qu'une seule fois et permettent que Chrome n'émette plus d'avertissement de sécurité (étape 5) la prochaine fois que vous lancerez Sarah
 
 Fonctionnalités
 ---------------
