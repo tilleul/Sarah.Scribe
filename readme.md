@@ -37,24 +37,35 @@ Le plugin Scribe est composé d'une partie NodeJS et d'une page web HTTPS. La pag
 - elle renvoie à Sarah/NodeJS ce que Google a pu déchiffrer, ainsi que l'indice de confiance de la reconnaissance Google
 - elle reçoit de Sarah les phrases qu'elle est en train de prononcer et surligne les mots qu'elle prononce. En même temps un petit visage constitué de smileys s'anime
 
-Quand vous dites une phrase, vous pouvez voir dans Chrome le moteur de Google chercher la meilleure correspondance (=reconnaissance PARTIELLE) jusqu'à ce que le moteur considère que la reconnaissance est terminée, auquel cas il renvoie une reconnaissance COMPLETE (qui s'affiche sur fond noir).
+Quand vous dites une phrase, vous pouvez voir dans Chrome le moteur de Google chercher la meilleure correspondance (=reconnaissance **PARTIELLE**) jusqu'à ce que le moteur considère que la reconnaissance est terminée, auquel cas il renvoie une reconnaissance **COMPLETE** (qui s'affiche sur fond noir).
 
 Les deux types de reconnaissance sont envoyés à Sarah, ce qui lui permet de réagir beaucoup plus vite que s'il fallait attendre la reconnaissance complète. Cette fonctionnalité est très utile car Google peut parfois mettre plusieurs secondes à reconnaitre une phrase simple ("oui", "non", "Sarah allume la lumière"). La reconnaissance partielle permet au plugins basés sur Scribe de réagir beaucoup plus vite. Ainsi, dès que la reconnaissance partielle à identifié "oui", "non" ou "allum*" (à rechercher avec un Regex par ex.), on pourrait utiliser ce résultat plutôt que d'attendre la reconnaissance complète. Bien entendu ce mécanisme est optionnel et vous n'êtes pas obligé de l'utiliser systématiquement.
 
 Le plugin Scribe expose de nouveaux objets JavaScript exploitables dans vos plugins, à travers l'objet `SARAH.context.scribe`.
 
-- compteur: il s'agit d'un compteur de phrases reconnues entièrement par Google. A chaque fois qu'une phrase est reconnue COMPLETEMENT, ce compteur est incrémenté de 1. Ce mécanisme permet de s'assurer très rapidement qu'une nouvelle phrase a été prononcée dans le micro simplement en comparant une valeur mémorisée du compteur avec l'actuelle valeur.
-- compteurPartial: il s'agit d'un compteur de phrases reconnues PARTIELLEMENT par Google. A chaque fois qu'une phrase est reconnue PARTIELLEMENT, ce compteur est incrémenté de 1. Dès que la phrase est reconnue entièrement, `compteurPartial` reprend la même valeur que `compteur`. Si on utilise la reconnaissance partielle, il faut mettre soi-même ce compteur à la même valeur que `compteur` sous peine de mal identifier les reconnaissances partielles suivantes.
-- lastReco: contient la dernière phrase reconnue COMPLETEMENT par Google.
-- lastPartial: contient la dernière phrase reconnue PARTIELLEMENT par Google.
-- lastConfidence: contient la valeur de confiance de la dernière reconnaissance COMPLETE
-- lastPartialConfidence: idem pour la dernière reconnaissance PARTIELLE
-- lastX: contient un objet `[{compteur: ..., reco: ..., confidence: ...}, {}, ...]` des X dernières reconnaissances complètes. La dernière phrase reconnue est toujours en `[0]`
-- microOFF(): fonction appelant `nircmd` pour éteindre le micro. C'est notamment utile pendant que Sarah parle afin que Google n'interprète pas ce que dit Sarah. Cette fonction est déjà appelée par `ScribeSpeak  et `ScribeAskMe`, il n'est donc pas nécessaire de l'appeler lorsqu'on utilise ces deux fonctions-là.
-- microON(): fonction appelant `nircmd` pour allumer le micro.
-- SarahEcoute(true|false): cette fonction permet de rendre sourde Sarah si on passe `false` en paramètre. Pour rétablir l'écoute de Sarah, on passe `true`. Cette fonction est très utile quand on désire ne traiter QUE la reconnaissance Google tout en empêchant Sarah d'exécuter la moindre grammaire. Cette fonction est déjà appelée par `ScribeAskMe`.
-- hook(): ceci permet d'appeler une fonction `callback` dès 
-
+- `compteur`: il s'agit d'un compteur de phrases reconnues entièrement par Google. A chaque fois qu'une phrase est reconnue COMPLETEMENT, ce compteur est incrémenté de 1. Ce mécanisme permet de s'assurer très rapidement qu'une nouvelle phrase a été prononcée dans le micro simplement en comparant une valeur mémorisée du compteur avec l'actuelle valeur.
+- `compteurPartial`: il s'agit d'un compteur de phrases reconnues PARTIELLEMENT par Google. A chaque fois qu'une phrase est reconnue PARTIELLEMENT, ce compteur est incrémenté de 1. Dès que la phrase est reconnue entièrement, `compteurPartial` reprend la même valeur que `compteur`. Si on utilise la reconnaissance partielle, il faut mettre soi-même ce compteur à la même valeur que `compteur` sous peine de mal identifier les reconnaissances partielles suivantes.
+- `lastReco`: contient la dernière phrase reconnue COMPLETEMENT par Google.
+- `lastPartial`: contient la dernière phrase reconnue PARTIELLEMENT par Google.
+- `lastConfidence`: contient la valeur de confiance de la dernière reconnaissance COMPLETE
+- `lastPartialConfidence`: idem pour la dernière reconnaissance PARTIELLE
+- `lastX`: contient un objet `[{compteur: ..., reco: ..., confidence: ...}, {}, ...]` des X dernières reconnaissances complètes. La dernière phrase reconnue est toujours en `[0]`
+- `microOFF()`: fonction appelant `nircmd` pour éteindre le micro. C'est notamment utile pendant que Sarah parle afin que Google n'interprète pas ce que dit Sarah. Cette fonction est déjà appelée par `ScribeSpeak  et `ScribeAskMe`, il n'est donc pas nécessaire de l'appeler lorsqu'on utilise ces deux fonctions-là.
+- `microON()`: fonction appelant `nircmd` pour allumer le micro.
+- `SarahEcoute(true|false)`: cette fonction permet de rendre sourde Sarah si on passe `false` en paramètre. Pour rétablir l'écoute de Sarah, on passe `true`. Cette fonction est très utile quand on désire ne traiter QUE la reconnaissance Google tout en empêchant Sarah d'exécuter la moindre grammaire. Cette fonction est déjà appelée par `ScribeAskMe`.
+- `hook()`: ceci permet d'appeler une fonction `callback` dès que Chrome a reconnu partiellement ou complètement une phrase. La fonction `callback` prend en argument un `event` indiquant si la reconnaissance est partielle, complète ou si il y a eu un time-out.
+Exemple de code:
+```javascript
+	SARAH.context.scribe.hook = function(event) {
+		if (event==SARAH.context.scribe.FULLRECO) {
+			// ... traiter la reconnaissance complète
+		} else if (event==SARAH.context.scribe.PARTIALRECO) {
+			// ... traiter la reconnaissance partielle
+		} else if (event==SARAH.context.scribe.TIME_ELAPSED) {
+			// ... traiter le time out
+		}
+	};
+```
 
 
 
