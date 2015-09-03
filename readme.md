@@ -34,11 +34,14 @@ Les étapes 7 à 14 ne sont à effectuer qu'une seule fois et permettent que Chrome
 Plugins Exemples
 ----------------
 Copiez chaque répertoire finissant par `_scribe` dans le répertoire `plugins` de Sarah pour bénéficier de plugins exemples utilisant le Scribe.
+
 Pour tous les plugins exemple, n'hésitez pas à voir comment Google interprête ce que vous dit. Vous verrez également Sarah parler. :-)
 
-### ANIMAUX
+A noter que la vraie Sarah est sourde pendant ces petits exemples afin d'éviter qu'elle n'enclenche ses grammaires XML classiques.
+
+#### Animaux
 Tout le plugin utilise strictement les fonctionnalités du Scribe (reconnaissance vocale Google), même pour les questions "oui/non"
-- Dites: "Sarah devine à quel animal je pense" et Sarah va vous poser une série de questions pour essayer de deviner.
+- Dites: "Sarah devine à quel animal je pense" et Sarah va vous poser une série de questions pour essayer de le deviner.
   - Répondez aux questions par "oui" ou par "non". Mais vous pouvez également dire "c'est exact" ou "correct" ou "non, ce n'est pas ça" etc. 
   - Il n'y a pas vraiment de limites de phrase correspondant à "oui" ou "non".
   - Dès qu'une phrase contient: "oui", "exact", "correct", "juste", "accord" alors c'est considéré comme "oui"
@@ -62,12 +65,51 @@ Enfin, vous pouvez demander à Sarah si elle sait si tel ou tel animal a telle ou
 	- elle cherche ensuite à savoir si la question se pose pour l'animal
 - pour ce morceau de plugin, vous **devez** dire le nom de l'animal au singulier car sinon j'aurais du traiter la conjugaison des verbes ("est-ce que les chiens **vivent** dans l'eau ?").
 
+#### AskMeTest
+Il s'agit d'un petit plugin tout simple pour tester comment fonctionne le `AskMe` du Scribe. S'ensuit un petit dialogue.
+Dites:
+- Sarah demande-moi ma couleur préférée
+  - Sarah vous pose la question
+  - Vous pouvez répondre soit par votre couleur préférée soit par celle que vous n'aimez justement pas. Sarah essaye de trouver dans votre réponse (et surtout **réagit différemment !!**) les mots suivants:
+	- "pas le (couleur)" ou "pas (couleur)" ou "pas la couleur (couleur)" (Ex: "je ne sais pas mais sûrement pas le noir !")
+	- "le (couleur)" ou "la couleur (couleur)" (ex: "j'aime le bleu")
+	- "aucune" ou "pas" (ex: "je n'en ai pas" ou "je n'en aime aucune")
+	- "toutes" ou "tout" (ex: "j'aime un peu de tout" ou "toutes !")
+- Sarah pose-moi des questions
+	- Sarah vous demande votre prénom et vous salue, puis Sarah demande votre âge
+	- du moment que votre réponse contient un nombre elle sera comprise par Sarah (ex: "22 ans" ou "je suis âgé de 22 ans" ou "j'ai 22 ans", "j'ai eu 22 ans hier", etc)
+	
+	
+#### Poils aux doigts
+Voici encore un plugin totalement inutile. 
+
+Dites:
+- Sarah poils aux doigts
+	- A partir de ce moment Sarah va écouter tout ce que vous dites et essayer de trouver une rime qui correspond. 
+	Ex: 
+	  - Je me demande ce que je vais faire. 
+	  - Poil aux artères !
+
+#### Sale Gamine
+Même principe que "Poil aux doigts" mais sans les rimes ..
+Dites:
+- Sarah sale gamine
+
+et Sarah répète tout ce que vous dites comme une sale gamine ... :-)
+
+#### Wikipedia
+Dites:
+- Sarah recherche (truc à rechercher) sur Wikipedia
+
+et Sarah fait la recherche et vous lit le premier paragraphe wikipedia correspondant.
+
+
 
 Fonctionnalités
 ---------------
 Le plugin Scribe est composé d'une partie NodeJS et d'une page web HTTPS. La page web HTTPS discute avec Sarah/NodeJS de manière bidirectionelle:
 - elle renvoie à Sarah/NodeJS ce que Google a pu déchiffrer, ainsi que l'indice de confiance de la reconnaissance Google
-- elle reçoit de Sarah les phrases qu'elle est en train de prononcer et surligne les mots qu'elle prononce. En même temps un petit visage constitué de smileys s'anime
+- elle reçoit de Sarah les phrases qu'elle est en train de prononcer et surligne les mots qu'elle prononce. En même temps un petit visage constitué de smileys s'anime.
 
 Quand vous dites une phrase, vous pouvez voir dans Chrome le moteur de Google chercher la meilleure correspondance (=reconnaissance **PARTIELLE**) jusqu'à ce que le moteur considère que la reconnaissance est terminée, auquel cas il renvoie une reconnaissance **COMPLETE** (qui s'affiche sur fond noir).
 
