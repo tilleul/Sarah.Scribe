@@ -31,6 +31,38 @@ Installation
 
 Les étapes 7 à 14 ne sont à effectuer qu'une seule fois et permettent que Chrome n'émette plus d'avertissement de sécurité (étape 5) la prochaine fois que vous lancerez Sarah
 
+Plugins Exemples
+----------------
+Copiez chaque répertoire finissant par `_scribe` dans le répertoire `plugins` de Sarah pour bénéficier de plugins exemples utilisant le Scribe.
+Pour tous les plugins exemple, n'hésitez pas à voir comment Google interprête ce que vous dit. Vous verrez également Sarah parler. :-)
+
+### ANIMAUX
+Tout le plugin utilise strictement les fonctionnalités du Scribe (reconnaissance vocale Google), même pour les questions "oui/non"
+- Dites: "Sarah devine à quel animal je pense" et Sarah va vous poser une série de questions pour essayer de deviner.
+  - Répondez aux questions par "oui" ou par "non". Mais vous pouvez également dire "c'est exact" ou "correct" ou "non, ce n'est pas ça" etc. 
+  - Il n'y a pas vraiment de limites de phrase correspondant à "oui" ou "non".
+  - Dès qu'une phrase contient: "oui", "exact", "correct", "juste", "accord" alors c'est considéré comme "oui"
+  - Dès qu'une phrase contient: "non" ou "pas" ("il n'a PAS de trompe"), c'est considéré comme "non"
+  - Dites "je ne joue plus" à tout moment pour arrêter le jeu
+  - A un moment Sarah va vous demander s'il s'agit de tel ou tel animal
+  - Si Sarah ne trouve pas votre animal, elle va vous demander une question permettant de différencier le vôtre et sa réponse à elle. 
+  - Choisissez bien votre question et surtout **prononcez-la distinctement** car c'est la reconnaissance Google qui entre en jeu.
+  - Sarah répète votre question et vous permet de la formuler autrement si Google n'a pas reconnu correctement ou si vous voulez en donner une autre.
+  - Sarah retient alors votre question et a ainsi appris un nouvel animal
+  
+Vous pouvez également demander à Sarah de vous en dire plus sur tel ou tel animal
+- Dites: "Sarah que peux-tu me dire sur (animal)"
+  - Sarah va alors parcourir sa base de connaissances pour ressortir tout ce qu'elle sait sur l'animal en question
+  - Cette partie du plugin est capable de traiter les animaux au singulier et au pluriel.
+  En effet, Sarah stocke le nom de l'animal au singulier (par ex: "un cheval"). Si vous lui demandez "Sarah que peux-tu me dire sur les chevaux", Sarah est capable d'identifier que le singulier de "chevaux" c'est cheval. Idem pour les animaux à noms composés ("les étoile**s** de mer", "les tortue**s** marine**s**", etc.)
+  
+Enfin, vous pouvez demander à Sarah si elle sait si tel ou tel animal a telle ou telle caractéristique. Par ex:
+- Dites: "Sarah est-ce qu'un chien vit dans l'eau"
+	- Sarah identifie l'animal (un chien) et recherche parmi ses questions une qui contient "vit dans l'eau"
+	- elle cherche ensuite à savoir si la question se pose pour l'animal
+- pour ce morceau de plugin, vous **devez** dire le nom de l'animal au singulier car sinon j'aurais du traiter la conjugaison des verbes ("est-ce que les chiens **vivent** dans l'eau ?").
+
+
 Fonctionnalités
 ---------------
 Le plugin Scribe est composé d'une partie NodeJS et d'une page web HTTPS. La page web HTTPS discute avec Sarah/NodeJS de manière bidirectionelle:
@@ -50,9 +82,9 @@ Le plugin Scribe expose de nouveaux objets JavaScript exploitables dans vos plug
 - `lastConfidence`: contient la valeur de confiance de la dernière reconnaissance COMPLETE
 - `lastPartialConfidence`: idem pour la dernière reconnaissance PARTIELLE
 - `lastX`: contient un objet `[{compteur: ..., reco: ..., confidence: ...}, {}, ...]` des X dernières reconnaissances complètes. La dernière phrase reconnue est toujours en `[0]`
-- `microOFF()`: fonction appelant `nircmd` pour éteindre le micro. C'est notamment utile pendant que Sarah parle afin que Google n'interprète pas ce que dit Sarah. Cette fonction est déjà appelée par `ScribeSpeak  et `ScribeAskMe`, il n'est donc pas nécessaire de l'appeler lorsqu'on utilise ces deux fonctions-là.
-- `microON()`: fonction appelant `nircmd` pour allumer le micro.
-- `SarahEcoute(true|false)`: cette fonction permet de rendre sourde Sarah si on passe `false` en paramètre. Pour rétablir l'écoute de Sarah, on passe `true`. Cette fonction est très utile quand on désire ne traiter QUE la reconnaissance Google tout en empêchant Sarah d'exécuter la moindre grammaire. Cette fonction est déjà appelée par `ScribeAskMe`.
+- `microOFF(callback)`: fonction appelant `nircmd` pour éteindre le micro. C'est notamment utile pendant que Sarah parle afin que Google n'interprète pas ce que dit Sarah. Cette fonction est déjà appelée par `ScribeSpeak  et `ScribeAskMe`, il n'est donc pas nécessaire de l'appeler lorsqu'on utilise ces deux fonctions-là. Peut appeler une fonction `callback` (optionelle).
+- `microON(callback)`: fonction appelant `nircmd` pour allumer le micro. Fonction `callback` en option.
+- `SarahEcoute(true|false, callback)`: cette fonction permet de rendre sourde Sarah si on passe `false` en paramètre. Pour rétablir l'écoute de Sarah, on passe `true`. Cette fonction est très utile quand on désire ne traiter QUE la reconnaissance Google tout en empêchant Sarah d'exécuter la moindre grammaire. Cette fonction est déjà appelée par `ScribeAskMe`. Fonction `callback` en option.
 - `hook()`: ceci permet d'appeler une fonction `callback` dès que Chrome a reconnu partiellement ou complètement une phrase. La fonction `callback` prend en argument un `event` indiquant si la reconnaissance est partielle, complète ou si il y a eu un time-out.
 Exemple de code:
 ```javascript
@@ -149,23 +181,27 @@ Exemple de code:
 			}
 	);
   ```
-  
 
-Avantages
----------
-- PLUS DE LIMITATION A 50 UTILISATIONS !!
-- Plus besoin de créer une clé Google API (dont le principe d'inscription change tout le temps)
-- vous pouvez utiliser le même principe (sans nécessairement Garbage) pour récupérer ce que Chrome a compris A TOUT INSTANT ! Par ex:
-  - votre grammaire contient "Sarah allume la lumière du salon" et "Sarah allume la lumière de la cuisine"
-  - anciennement il fallait passer en argument (action/data) le mot "salon" ou "cuisine" si on voulait que Sarah réponde "j'ai allumé la lumière de la cuisine/salon"
-  - vous pouvez à présent utiliser la dernière phrase reconnue par Google pour savoir quelle lumière vous avez demandé en dernier !
-- Pour certains mots, Chrome est beaucoup plus précis au niveau de la reconnaissance. C'est notamment le cas pour tous les mots en anglais mais aussi pour les nombres.
-  
+Options de configuration du plugin
+----------------------------------
+Depuis l'interface serveur de Sarah
+- `ports_https`: Choix du port https (par défaut 4300)
+- `autorun_browser`: Permet de lancer Chrome automatiquement au démarrage de Sarah sur la page du serveur
+- `kill_broswer_on_startup`: Si `autorun_browser` est `true`, ce paramètre permet de tuer toute autre fenêtre Chrome déjà ouverte
+- `maxReco`: nombre de reconnaissances vocales à stocker dans le paramètre `lastX` du Scribe (voir plus haut)
+- `speak_surcharge`: `true` ou `false` (défaut). Permet de surcharger la fonction `SARAH.speak()` pour qu'elle utilise systématiquement les fonctionnalités de `ScribeSpeak()`. Expérimental. Plus vraiment testé/vérifié depuis un bail. De toutes façons la surcharge ne fonctionne pas avec les `out.action._attributes.tts` qui sont dans les grammaires XML donc ca reste bancal.
 
-Inconvénients
--------------
-- tributaire de Google Chrome (plantages ? comment les détecter, relancer Chrome, etc)
-- dépend de la qualité de la connexion (vitesse, stabilité, disponibilité des serveurs Google etc)
-- Chrome peut entendre la réponse de Sarah ou d'autres bruits et donc renvoyer quelques chose d'erroné (solution ? couper le micro ?)
-- il faut (légèrement) réécrire les plugins qui utiliseraient la règle GARBAGE si on veut utiliser ce principe (il faut aussi réécrire le code de speech_test.js pour qu'il utilise un certificat SSL qui ne change pas à chaque lancement ... mais bon c'est une autre histoire)
+Créer un plugin qui utilise les fonctionnalités du Scribe
+---------------------------------------------------------
+Utilisez `ScribeSpeak()` et `ScribeAskMe()` pour vocaliser et attendre des réponses tout en rendant Sarah sourde et en coupant le micro au bon moment.
 
+N'utilisez donc plus `SARAH.speak()` sinon Google vous entendra (ou alors utilisez `microOFF()` pour couper le micro).
+
+N'utilisez plus non plus `callback({tts: 'texte à dire'})` car cela ne coupe pas le micro. Utilisez plutôt:
+```javascript
+ScibeSpeak("texte à dire", function() {
+	callback();
+});
+```
+
+Evitez le tts directement dans la grammaire XML (`out.action._attributes.tts`) puisqu'à nouveau c'est Sarah qui parle directement sans couper le micro.
