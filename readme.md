@@ -256,7 +256,7 @@ N'utilisez donc plus `SARAH.speak()` sinon Google vous entendra (ou alors utilis
 
 N'utilisez plus non plus `callback({tts: 'texte à dire'})` car cela ne coupe pas le micro. Utilisez plutôt:
 ```javascript
-ScibeSpeak("texte à dire", function() {
+ScribeSpeak("texte à dire", function() {
 	callback();
 });
 ```
