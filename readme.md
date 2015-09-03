@@ -66,7 +66,16 @@ Exemple de code:
 		}
 	};
 ```
-
+- `ScribeSpeak(tts, callback)`: remplace la fonction `SARAH.speak()` avec en paramètre:
+  - `tts`: le texte à dire. Ce texte peut être une chaîne de caractères classiques, ou un array (ex: `['bonjour','salut',ça ca']`) ou une chaine de caractères spéraées par des `|` (ex: `"Bonjour|Salut|ça va"`). Dans les deux derniers cas, le Scribe fera dire à Sarah **au hasard** une des phrases de l'array ou une des phrases séparées par `|` (ex: Sarah dira "bonjour" ou "salut" ou "ça va").
+  - `callback`: Peut être
+    - une fonction `callback()` classique (comme `SARAH.speak()`) 
+	- à `true` afin de forcer la synchronisation
+	- à `false` ou êtes omis pour fonctionner en asynchrone (le code principal continue de s'exécuter sans attendre la fin de la vocalisation)
+`ScribeSpeak` n'est pas qu'un simple remplacement de `SARAH.speak()` car en plus,
+  - il arrête la reconnaissance Google le temps de la vocalisation
+  - il coupe le micro avant vocalisation afin d'éviter que Google n'interprête ce que Sarah dit comme étant quelque chose qu'un humain aurait dit
+  - il rétablit le micro après la vocalisation
 
 
 Avantages
