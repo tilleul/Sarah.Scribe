@@ -73,11 +73,18 @@ Exemple de code:
 	- à `true` afin de forcer la synchronisation
 	- à `false` ou êtes omis pour fonctionner en asynchrone (le code principal continue de s'exécuter sans attendre la fin de la vocalisation)
 
-`ScribeSpeak` n'est pas qu'un simple remplacement de `SARAH.speak()` car en plus,
-  - il arrête la reconnaissance Google le temps de la vocalisation
-  - il coupe le micro avant vocalisation afin d'éviter que Google n'interprête ce que Sarah dit comme étant quelque chose qu'un humain aurait dit
-  - il rétablit le micro après la vocalisation
-
+  `ScribeSpeak` n'est pas qu'un simple remplacement de `SARAH.speak()` car en plus,
+    - il arrête la reconnaissance Google le temps de la vocalisation
+    - il coupe le micro avant vocalisation afin d'éviter que Google n'interprête ce que Sarah dit comme étant quelque chose qu'un humain aurait dit
+	- il surligne au fur et à mesure, sur la page web HTTPS, les mots que Sarah prononce et demande à la page web d'animer le visage
+    - il rétablit le micro après la vocalisation
+  Exemple: 
+  ```javascript
+  ScribeSpeak("Bonjour je m'appelle Sarah et les mots de cette phrase sont surlignés au fur et à mesure.", function() {
+	// fonction callback une fois que la vocalisation est terminée
+  })
+  ```
+  
 - `ScribeAskMe(question, reponses, callback, options)`: remplace la fonction `SARAH.askme()`. Paramètres:
   - `question`: la question a poser (chaine de caractères)
   - `reponses`: un array de la forme `[{'regex': regexp, 'match_number': number, 'answer': object}, {...}]`. 
@@ -101,7 +108,7 @@ Exemple de code:
 	   - `false`: la question n'est pas répétée
 	   - Si contient une chaine de caractères, alors cette chaine est vocalisée pluttôt que de répéter la question
 	 - `waitForFinal`: Si `true` alors seule une reconnaissance **complète** est autorisée. Si `false` alors on peut utiliser une reconnaissance **partielle**. Vaut `true` par défaut.
-	 - 'usePartialAfterTimeout`: Si `true` alors, en cas de timeout parce qu'il n'y a pas de phrase reconnue **complètement**, on autorise l'utilisation des bribes de phrase reconnues **partiellement** (c'est un peu l'option de la dernière chance). Si `false` alors on ne donne pas la possibilité d'utiliser ce qui a été reconnu **partiellement** en cas de timeout. Vaut `true` par défaut
+	 - `usePartialAfterTimeout`: Si `true` alors, en cas de timeout parce qu'il n'y a pas de phrase reconnue **complètement**, on autorise l'utilisation des bribes de phrase reconnues **partiellement** (c'est un peu l'option de la dernière chance). Si `false` alors on ne donne pas la possibilité d'utiliser ce qui a été reconnu **partiellement** en cas de timeout. Vaut `true` par défaut
 	 - `partialThreshold`: flottant indiquant l'indice de confiance minimum à considérer si `waitForFinal` est égal à `false` ou que `usePartialAfterTimeout` est `true` et que donc on utilise la reconnaissance partielle. Vaut 0.8 par défaut.
 	 
   
