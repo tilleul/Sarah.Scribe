@@ -1,0 +1,13 @@
+{
+	"modules" : { 
+		"scribe"  : {
+			"description": "Utilisation de la reconnaissance vocale HTML5 (avec Chrome)",
+			"version": "1.0",
+			"port_https": 4300,
+			"autorun_browser": false,
+			"kill_browser_on_startup": true,
+			"maxReco": 10,
+			"speak_surcharge": false
+		}
+	}
+}
