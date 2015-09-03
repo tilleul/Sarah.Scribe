@@ -1,0 +1,120 @@
+Q1: est-ce qu'il vit dans l'eau ?
+Y1: Q2
+N1: Q3
+Q2: est-ce qu'il a une queue ?
+Y2: Q8
+N2: Q14
+Q3: est-ce qu'il a des ailes ?
+Y3: Q4
+N3: Q5
+Q4: utilise-t-il ses ailes pour voler ?
+Y4: Q12
+N4: Q38
+Q5: est-ce qu'il a des poils qui constituent de la fourrure ou un pelage ?
+Y5: Q6
+N5: Q7
+Q6: est-ce qu'il a des rayures ?
+Y6: Q18
+N6: Q11
+Q7: est-ce qu'il a une trompe ?
+Y7: un éléphant
+N7: Q21
+Q8: est-ce qu'il a des branchies ?
+Y8: Q10
+N8: Q9
+Q9: est-ce qu'il a des dents ?
+Y9: un dauphin
+N9: Q40
+Q10: est-ce que c'est le mâle qui porte les oeufs dans une poche ventrale ?
+Y10: un hippocampe
+N10: Q28
+Q11: est-ce qu'il a un long cou ?
+Y11: une girafe
+N11: Q15
+Q12: est-ce que c'est un insecte ?
+Y12: Q13
+N12: Q17
+Q13: est-ce qu'il fait du miel ?
+Y13: une abeille
+N13: Q25
+Q14: est-ce qu'il a des tentacules ?
+Y14: une pieuvre
+N14: Q22
+Q15: est-ce un animal domestique ?
+Y15: Q16
+N15: Q19
+Q16: est-ce qu'il a des cornes ?
+Y16: une vache
+N16: un chien
+Q17: est-ce qu'il est capable de parler ?
+Y17: un perroquet
+N17: Q23
+Q18: est-ce qu'il est carnivore ?
+Y18: un tigre
+N18: un zèbre
+Q19: est-ce que c'est un rongeur ?
+Y19: Q37
+N19: Q20
+Q20: est-ce que c'est un félin ?
+Y20: un lion
+N20: Q34
+Q21: est-ce que c'est un reptile ?
+Y21: Q24
+N21: Q26
+Q22: est-ce qu'il vit en eau douce ?
+Y22: une grenouille
+N22: Q32
+Q23: est-ce qu'il émet des ultrasons ?
+Y23: une chauve-souris
+N23: Q30
+Q24: est-ce qu'il appartient à une espèce éteinte ?
+Y24: un tyrannosaure
+N24: Q29
+Q25: est-ce qu'il possède 4 ailes ?
+Y25: un papillon
+N25: une mouche
+Q26: est-ce que c'est un mammifère ?
+Y26: Q35
+N26: Q27
+Q27: est-ce que c'est un insecte ?
+Y27: une fourmi
+N27: Q31
+Q28: est-ce que c'est un crustacé ?
+Y28: un homard
+N28: un poisson
+Q29: est-ce qu'il rampe ?
+Y29: un serpent
+N29: un lézard
+Q30: est-ce qu'il a des pattes palmées ?
+Y30: un aigle
+N30: un canard
+Q31: est-ce que c'est un mollusque ?
+Y31: un cloporte
+N31: un escargot
+Q32: est-ce que c'est un mollusque ?
+Y32: une moule
+N32: Q33
+Q33: est-ce qu'il a des piquants ?
+Y33: un oursin
+N33: Q36
+Q34: est-ce que c'est un primate ?
+Y34: un singe
+N34: un ours
+Q35: est-ce qu'il a une cuirasse ?
+Y35: un tatou
+N35: un rhinocéros
+Q36: est-ce qu'il a des pinces ?
+Y36: un crabe
+N36: une étoile de mer
+Q37: est-ce qu'il vit dans les égouts ?
+Y37: un rat
+N37: un écureuil
+Q38: est-ce qu'il a un long cou ?
+Y38: une autruche
+N38: Q39
+Q39: est-ce qu'on le trouve en élevage ?
+Y39: une poule
+N39: un pingouin
+Q40: est-ce que c'est un reptile ?
+Y40: une tortue marine
+N40: une baleine

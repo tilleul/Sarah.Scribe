@@ -1,0 +1,8 @@
+{
+	"modules" : { 
+		"salegamine_scribe"  : {
+			"description": "Sarah répète tout ce qu'elle entend comme une sale gamine",
+			"version": "1.0"
+		}
+	}
+}

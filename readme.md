@@ -35,7 +35,7 @@ Plugins Exemples
 ----------------
 Copiez chaque répertoire finissant par `_scribe` dans le répertoire `plugins` de Sarah pour bénéficier de plugins exemples utilisant le Scribe.
 
-Pour tous les plugins exemple, n'hésitez pas à voir comment Google interprête ce que vous dit. Vous verrez également Sarah parler. :-)
+Pour tous les plugins exemple, n'hésitez pas à voir comment Google interprète ce que vous dites. Vous verrez également Sarah parler. :-)
 
 A noter que la vraie Sarah est sourde pendant ces petits exemples afin d'éviter qu'elle n'enclenche ses grammaires XML classiques.
 
@@ -232,6 +232,21 @@ Depuis l'interface serveur de Sarah
 - `kill_broswer_on_startup`: Si `autorun_browser` est `true`, ce paramètre permet de tuer toute autre fenêtre Chrome déjà ouverte
 - `maxReco`: nombre de reconnaissances vocales à stocker dans le paramètre `lastX` du Scribe (voir plus haut)
 - `speak_surcharge`: `true` ou `false` (défaut). Permet de surcharger la fonction `SARAH.speak()` pour qu'elle utilise systématiquement les fonctionnalités de `ScribeSpeak()`. Expérimental. Plus vraiment testé/vérifié depuis un bail. De toutes façons la surcharge ne fonctionne pas avec les `out.action._attributes.tts` qui sont dans les grammaires XML donc ca reste bancal.
+
+Les paramètres suivants permettent de régler le temps en millisecondes qu'il faut à Sarah pour prononcer une lettre ou un chiffre, le temps de pause qu'elle met après une virgule, un point d'interrogation, etc. A régler selon la voix que vous utilisez. Les préréglages fonctionnent de manière satisfaisante avec la voix de Hortense (microsoft):
+- `pause_par_lettre`: 56
+- `pause_virgule`: 500
+- `pause_exclamation`: 600
+- `pause_interrogation": 600
+- `pause_point_virgule`: 250
+- `pause_deux_points`: 250
+- `pause_trois_petits_points`: 0
+- `pause_point`: 1250
+- `pause_par_chiffre`: 300
+
+Enfin, ce dernier paramètre permet de faire dire à Sarah toute une série de phrase au démarrage pour vous aider à régler les différents timings précédemment cités.
+- `tests_vocaux`: `false` (défaut) ou `true`
+
 
 Créer un plugin qui utilise les fonctionnalités du Scribe
 ---------------------------------------------------------

@@ -1,0 +1,9 @@
+{
+	"modules" : { 
+		"animaux_scribe"  : {
+			"description": "Pensez à un animal et Sarah va tenter de le deviner",
+			"version": "1.0",
+			"timeout_msec": 10000
+		}
+	}
+}

@@ -1,0 +1,9 @@
+{
+	"modules" : { 
+		"askmeTest_scribe"  : {
+			"description": "Exemples d'utilisation du ASKME de SCRIBE pour poser des questions",
+			"version": "1.0",
+			"timeout_msec": 15000
+		}
+	}
+}

@@ -1,0 +1,9 @@
+{
+	"modules" : { 
+		"wikipedia_scribe"  : {
+			"description": "Recherche wikipedia avec Scribe",
+			"version": "1.0",
+			"timeout_msec": 10000
+		}
+	}
+}

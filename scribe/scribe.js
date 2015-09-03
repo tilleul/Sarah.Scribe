@@ -1,5 +1,6 @@
 var __nircmd = __dirname + '/bin/nircmd.exe ';
 var say=[];
+var maConfig;
 
 // events names
 TIME_ELAPSED = 'TIME_ELAPSED';
@@ -247,6 +248,8 @@ function _ScribeSpeak(tts, callback, SARAH_local) {
 	if (typeof SARAH_local === 'undefined') SARAH_local = SARAH_scribe;
 	if (typeof callback ==="undefined") callback=false;
 
+	
+	
 	tts = pickOne(tts);
 	// protection temporaire de la ponctuation, pour éviter de la "détacher"
 	tts = tts.replace(/ !/,"²!");	// " !"
@@ -330,26 +333,28 @@ function _ScribeSpeak(tts, callback, SARAH_local) {
 				if (j!=txt.length-1) right+= ' ';
 			}
 
-			timeout = 56 * saying.replace(/[' -]/g,'').length;	
+			timeout = maConfig.pause_par_lettre * saying.replace(/[' -]/g,'').length;	
 			malus2=0;
 			// malus si il y a des "!", "," ou "?"
-			malus = (saying.match(/[,]/g) || []).length * 500;
-			malus += (saying.match(/[!\?]/g) || []).length * 600;
+			malus = (saying.match(/[,]/g) || []).length * maConfig.pause_virgule;
+			malus += (saying.match(/[!]/g) || []).length * maConfig.pause_exclamation;
+			malus += (saying.match(/[\?]/g) || []).length * maConfig.pause_interrogation;
 //console.log(saying + " - malus " + malus);
 			// malus si il y a des ";" ou des ":"
-			malus += (saying.match(/[;\:]/g) || []).length * 250;
+			malus += (saying.match(/[;]/g) || []).length * maConfig.pause_point_virgule;
+			malus += (saying.match(/[\:]/g) || []).length * maConfig.pause_deux_points;
 			// malus si il y a des "..." ou des ".."
 			petits_points = (saying.match(/(\.\.)/g) || []).length;
-			malus2= petits_points * 00;
+			malus2= petits_points * maConfig.pause_trois_petits_points;
 //console.log(saying + " - malus2 " + malus2);
 			malus+=malus2
 			// si pas de ... alors y a t il des . ?
-			if (petits_points==0) malus+= (saying.match(/[\.]/g) || []).length * 1250;
+			if (petits_points==0) malus+= (saying.match(/[\.]/g) || []).length * maConfig.pause_point;
 
 		
 			// malus pour les nombres ...
-			malus += (saying.match(/([0-9])/g) || []).length * 300;
-//console.log(saying + " - malus " + malus);
+			malus += (saying.match(/([0-9])/g) || []).length * maConfig.pause_par_chiffre;
+console.log(saying + " - malus " + malus);
 			
 			timeout+=malus;			
 			if (i==0) {
@@ -359,7 +364,7 @@ function _ScribeSpeak(tts, callback, SARAH_local) {
 				pause = 800 + (tts.length>1000 ? (tts.length*2) : 0);
 				timeout += pause;
 			} else pause = 0;
-//console.log("timeout " + timeout);			
+console.log("timeout " + timeout);			
 			say.push({'left': left, 'saying': saying, 'right': right, phrase: tts,
 					  'html': (left ? '<span>' + left + '</span>': '') + 
 							  (saying ? '<span class="saying">' + saying + '</span>' : '') + 
@@ -690,7 +695,8 @@ if (maConfig.autorun_browser==true) {
 //setTimeout(function() { _ScribeSpeak("Quelle bonne question faut-il poser pour différencier un moineau et un aigle ?",true)},2000);
 
 // tests vocaux
-/*
+
+if (maConfig.tests_vocaux) {
 setTimeout(function() {
 	_ScribeSpeak("Les mathématiques sont un ensemble de connaissances abstraites résultant de raisonnements logiques appliqués à des objets divers tels que les nombres, les figures, les structures et les transformations.", function() {
 		setTimeout(function() {
@@ -704,14 +710,7 @@ setTimeout(function() {
 										setTimeout(function() {
 											_ScribeSpeak("et voici encore un peu de temps passé à écouter n'importe quoi, (y en a qui ont rien d'autre à faire, franchement !)", 
 											function() {
-												_ScribeSpeak(['bonjour','salut','bienvenue'], function() {
-													console.log(1);
-													_ScribeSpeak('François|monsieur|mon ami', function() {
-														console.log(2);
-														_ScribeSpeak('ça va ?|comment allez-vous ?|en forme ?', function() {
-															console.log(3);
-														});
-													});
+												_ScribeSpeak("Claude Monet, né le 14 novembre 1840 à Paris et mort le 5 décembre 1926 (à 86 ans) à Giverny, est un peintre français, l’un des fondateurs de l'impressionnisme, peintre de paysages et de portraits.", function() {
 												});
 											});
 										},5000);
@@ -725,7 +724,7 @@ setTimeout(function() {
 		}, 2000);
 	});
 }, 2000);
-*/
+}
 
 
 

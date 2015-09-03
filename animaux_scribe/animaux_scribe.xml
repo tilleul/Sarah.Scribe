@@ -1,0 +1,20 @@
+<grammar version="1.0" xml:lang="fr-FR" mode="voice" root="rule_animaux_scribe" xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
+<rule id="rule_animaux_scribe" scope="public">
+
+	<tag>out.action=new Object();</tag>
+
+	<one-of>
+		<item>Sarah devine à quel animal je pense</item>
+		<item>Sarah devine l'animal auquel je pense</item>
+		<item>Sarah dis-moi ce que tu sais sur <ruleref special="GARBAGE" /><tag>out.action.action="encyclo";</tag></item>
+		<item>Sarah que sais-tu sur <ruleref special="GARBAGE" /><tag>out.action.action="encyclo";</tag></item>
+		<item>Sarah parle-moi <ruleref special="GARBAGE" /><tag>out.action.action="encyclo";</tag></item>
+		<item>Sarah que peux tu me dire <ruleref special="GARBAGE" /><tag>out.action.action="encyclo";</tag></item>
+		<item>Sarah est-ce que <ruleref special="GARBAGE" /><tag>out.action.action="encyclo2";</tag></item>
+		<item>Sarah je voudrais savoir si <ruleref special="GARBAGE" /><tag>out.action.action="encyclo2";</tag></item>
+	</one-of>
+
+	<tag>out.action._attributes.uri="http://127.0.0.1:8080/sarah/animaux_scribe";</tag>
+
+</rule>
+</grammar>

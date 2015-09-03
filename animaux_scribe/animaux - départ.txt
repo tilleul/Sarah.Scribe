@@ -1,0 +1,21 @@
+Q1: Est-ce qu'il vit dans l'eau ?
+Y1: Q2
+N1: Q3
+Q2: Est-ce qu'il a une queue ?
+Y2: Une baleine
+N2: Une étoile de mer
+Q3: Est-ce qu'il a des ailes ?
+Y3: Q4
+N3: Q5
+Q4: Peut-il voler ?
+Y4: Un aigle
+N4: Un pingouin
+Q5: Est-ce qu'il a de la fourrure ?
+Y5: Q6
+N5: Q7
+Q6: Est-ce qu'il a des rayures ?
+Y6: Un tigre
+N6: Un ours
+Q7: Est-ce qu'il a une trompe ?
+Y7: Un éléphant
+N7: Un tatou 

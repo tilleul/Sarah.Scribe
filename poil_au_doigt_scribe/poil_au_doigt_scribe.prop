@@ -1,0 +1,8 @@
+{
+	"modules" : { 
+		"poil_au_doigt_scribe"  : {
+			"description": "Sarah trouve une rime à tout ce que vous lui dites ... poil aux orbites !",
+			"version": "1.0"
+		}
+	}
+}
