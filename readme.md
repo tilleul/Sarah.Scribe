@@ -82,7 +82,7 @@ Exemple de code:
   ```javascript
   ScribeSpeak("Bonjour je m'appelle Sarah et " + 
 			  "les mots de cette phrase sont surlignés au fur et à mesure.", function() {
-	// fonction callback une fois que la vocalisation est terminée
+				// fonction callback appelée une fois que la vocalisation est terminée
   })
   ```
   
@@ -91,12 +91,13 @@ Exemple de code:
   - `reponses`: un array de la forme `[{'regex': regexp, 'match_number': number, 'answer': object}, {...}]`. 
     - Les phrases reconnues par Google sont comparées avec une expression **regex** en utilisant la méthode JS **match()**. 
 	- L'expression regex se place dans le paramètre `regex`, 
-	- le n° de l'item à **matcher** se place dans `match_number` (la fonction `match()` peut renvoyer plusieurs résultats sous forme d'un array, `match_number` contient le n° de l'item à considérer).
-	- s'il y a un match, le Scribe renverra l'objet associé à `answer`
-  - `callback` est la fonction `callback` de rappel sous la forme `callback(answer,match,phrase)`. Avec
-    - `answer`: l'objet définit dans `reponses` s'il y a eu un match, ou bien `false` si il n'y a pas eu de match ou bien `undefined` s'il n'y a pas eu de réponse
-	- `match`: le bout de phrase qui a été trouvé par le regex
+	- le n° de l'item à **matcher** se place dans `match_number` (la fonction `match()` peut renvoyer plusieurs résultats sous forme d'un array, `match_number` contient le n° de l'item à considérer). Par défaut, vaut `0`.
+	- s'il y a un match, le Scribe renverra l'objet associé à `answer` ou, s'il n'a pas été défini, il renverra le n° de la place dans l'array **+ 1**
+  - `callback` est la fonction `callback` de rappel sous la forme `callback(answer,phrase,match,wholeMatch)`. Avec
+    - `answer`: l'objet définit dans `reponses` s'il y a eu un match (ou bien un numéro correspondant à l'indice de la a réponse reçue **+ 1** -- voir juste avant), ou bien `false` si il n'y a pas eu de match ou bien `undefined` s'il n'y a pas eu de réponse
 	- `phrase`: la phrase reconnue par Google et qui a servi au traitement regex `match()`
+	- `match`: le bout de phrase qui a été trouvé par le regex
+	- `wholeMatch`: l'array match complet qui a été renvoyée par le regex
   - `options`: un objet `{}` comprenant les paramètres optionnels suivants:
      - `timeout`: nombre de millisecondes avant de considérer qu'on n'a pas répondu à la question. 10000 par défaut.
 	 - `essais`: nombre d'essais autorisés en cas de timeout ou en cas de réponse ne contenant pas ce qu'on cherche (si l'option `retryIfNoMatch` est à `true`). Par défaut égal à 1.
@@ -111,7 +112,34 @@ Exemple de code:
 	 - `waitForFinal`: Si `true` alors seule une reconnaissance **complète** est autorisée. Si `false` alors on peut utiliser une reconnaissance **partielle**. Vaut `true` par défaut.
 	 - `usePartialAfterTimeout`: Si `true` alors, en cas de timeout parce qu'il n'y a pas de phrase reconnue **complètement**, on autorise l'utilisation des bribes de phrase reconnues **partiellement** (c'est un peu l'option de la dernière chance). Si `false` alors on ne donne pas la possibilité d'utiliser ce qui a été reconnu **partiellement** en cas de timeout. Vaut `true` par défaut
 	 - `partialThreshold`: flottant indiquant l'indice de confiance minimum à considérer si `waitForFinal` est égal à `false` ou que `usePartialAfterTimeout` est `true` et que donc on utilise la reconnaissance partielle. Vaut 0.8 par défaut.
-	 
+  Exemple:
+  ```javascript
+  q = "Est-ce que l'animal auquel tu penses possède des ailes ?";
+  ScribeAskMe(q, [
+				 {'regex': /(joue plus|joue pas)/i, 'answer':'stop'},
+				 {'regex': /(oui|correct|juste|exact|accord|ok)/, 'answer':'oui'},
+				 {'regex': /(non|pas)/, 'answer':'non'}
+				], function(answer,phrase,match,wholeMatch) {
+						if (answer=='oui') {
+							// traiter le fait qu'on a répondu oui
+						} else if (answer=='non') {
+							// traiter le fait qu'on a répondu non
+						} else if (answer=="stop") {
+							// traiter le fait qu'on a demandé d'arrêter de jouer
+						} else if (answer==false) {
+							// si on arrive ici c'est qu'on a répondu quelque chose qui n'a pas été compris par le scribe/google
+						} else {
+							// si on arrive ici c'est qu'on n'a rien répondu (typeof answer === 'undefined')
+						}
+				}, 
+			{'timeout':15000, 	// on demande 15 sec de trimeou
+			'retryIfNoMatch': "Je ne suis pas sûr d'avoir compris. Peux-tu répéter ? " + q, // si on n'a pas répondu, on explique puis on répète la question
+			'essais': 2, 		// on a droit à deux essais
+			waitForFinal: false, 		// on autorise le traitement des réponses partielles
+			partialThreshold: 0.01 		// avec un taux de confidence de 1% ! (c'est le plus bas possible !)
+			}
+	);
+  ```
   
 
 Avantages
