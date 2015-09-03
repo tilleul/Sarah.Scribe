@@ -80,7 +80,8 @@ Exemple de code:
     - il rétablit le micro après la vocalisation
   Exemple: 
   ```javascript
-  ScribeSpeak("Bonjour je m'appelle Sarah et les mots de cette phrase sont surlignés au fur et à mesure.", function() {
+  ScribeSpeak("Bonjour je m'appelle Sarah et " + 
+			  "les mots de cette phrase sont surlignés au fur et à mesure.", function() {
 	// fonction callback une fois que la vocalisation est terminée
   })
   ```
