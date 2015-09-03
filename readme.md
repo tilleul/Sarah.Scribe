@@ -72,6 +72,7 @@ Exemple de code:
     - une fonction `callback()` classique (comme `SARAH.speak()`) 
 	- à `true` afin de forcer la synchronisation
 	- à `false` ou êtes omis pour fonctionner en asynchrone (le code principal continue de s'exécuter sans attendre la fin de la vocalisation)
+
 `ScribeSpeak` n'est pas qu'un simple remplacement de `SARAH.speak()` car en plus,
   - il arrête la reconnaissance Google le temps de la vocalisation
   - il coupe le micro avant vocalisation afin d'éviter que Google n'interprête ce que Sarah dit comme étant quelque chose qu'un humain aurait dit
