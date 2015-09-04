@@ -354,7 +354,7 @@ function _ScribeSpeak(tts, callback, SARAH_local) {
 		
 			// malus pour les nombres ...
 			malus += (saying.match(/([0-9])/g) || []).length * maConfig.pause_par_chiffre;
-console.log(saying + " - malus " + malus);
+//console.log(saying + " - malus " + malus);
 			
 			timeout+=malus;			
 			if (i==0) {
@@ -364,7 +364,7 @@ console.log(saying + " - malus " + malus);
 				pause = 800 + (tts.length>1000 ? (tts.length*2) : 0);
 				timeout += pause;
 			} else pause = 0;
-console.log("timeout " + timeout);			
+//console.log("timeout " + timeout);			
 			say.push({'left': left, 'saying': saying, 'right': right, phrase: tts,
 					  'html': (left ? '<span>' + left + '</span>': '') + 
 							  (saying ? '<span class="saying">' + saying + '</span>' : '') + 
