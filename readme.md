@@ -118,7 +118,8 @@ Dites:
 et Sarah fait la recherche et vous lit le premier paragraphe wikipedia correspondant.
 
 #### Liste des courses
-Ce plugin gère une liste de courses simple
+Ce plugin gère une liste de courses simple.
+
 Pour ajouter un article à la liste, dites:
 - Sarah je veux acheter (quelque chose)
 - Sarah je n'ai plus de (quelque chose)
@@ -164,6 +165,7 @@ Le plugin Scribe expose de nouveaux objets JavaScript exploitables dans vos plug
 - `microOFF(callback)`: fonction appelant `nircmd` pour éteindre le micro. C'est notamment utile pendant que Sarah parle afin que Google n'interprète pas ce que dit Sarah. Cette fonction est déjà appelée par `ScribeSpeak  et `ScribeAskMe`, il n'est donc pas nécessaire de l'appeler lorsqu'on utilise ces deux fonctions-là. Peut appeler une fonction `callback` (optionelle).
 - `microON(callback)`: fonction appelant `nircmd` pour allumer le micro. Fonction `callback` en option.
 - `SarahEcoute(true|false, callback)`: cette fonction permet de rendre sourde Sarah si on passe `false` en paramètre. Pour rétablir l'écoute de Sarah, on passe `true`. Cette fonction est très utile quand on désire ne traiter QUE la reconnaissance Google tout en empêchant Sarah d'exécuter la moindre grammaire. Cette fonction est déjà appelée par `ScribeAskMe`. Fonction `callback` en option.
+**Attention** en v4, cette fonction ne rend pas réellement Sarah sourde, mais change le `context` des grammaires à `rien` pour éviter qu'elle ne réagisse aux grammaires, puis à `default` pour rétablir son écoute. Cela signifie donc qu'on dépend aussi du `ctxTimeOut` dans le `custom.ini`
 - `hook()`: ceci permet d'appeler une fonction `callback` dès que Chrome a reconnu partiellement ou complètement une phrase. La fonction `callback` prend en argument un `event` indiquant si la reconnaissance est partielle, complète ou si il y a eu un time-out.
 Exemple de code:
 ```javascript
