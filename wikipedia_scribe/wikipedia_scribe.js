@@ -4,13 +4,13 @@ var TIME_ELAPSED;
 var FULL_RECO;
 var PARTIAL_RECO;
 
-exports.action = function(data, callback, config_local, SARAH_local){
-	if (typeof SARAH_local != 'undefined') {
-		Config = config_local;
-		SARAH = SARAH_local;
-	}
+exports.action = function(data, callback, config, SARAH){
+	/*if (typeof Config === 'undefined') {
+		var Config = config_local;
+		var SARAH = SARAH_local;
+	}*/
 	
-	maConfig = Config.modules.wikipedia_scribe;
+	maConfig = config.modules.wikipedia_scribe;
 	ScribeSpeak = SARAH.ScribeSpeak;
 
 	FULL_RECO = SARAH.context.scribe.FULL_RECO;
@@ -39,14 +39,14 @@ function checkScribe(event, action, SARAH, callback) {
 		// aurait-on trouvé ?
 		
 		
-		decodeScribe(SARAH.context.scribe.lastReco, callback);
+		decodeScribe(SARAH.context.scribe.lastReco, SARAH, callback);
 	} else if (event==TIME_ELAPSED) {
 		// timeout !
 		SARAH.context.scribe.hook = undefined;
 		// aurait-on compris autre chose ?
 		if (SARAH.context.scribe.lastPartialConfidence >= 0.7 && 
 			SARAH.context.scribe.compteurPartial>SARAH.context.scribe.compteur) 
-			decodeScribe(SARAH.context.scribe.lastPartial, callback);
+			decodeScribe(SARAH.context.scribe.lastPartial, SARAH, callback);
 		else {
 			SARAH.context.scribe.activePlugin('aucun (Liste des courses)');
 			ScribeSpeak("Désolé je n'ai pas compris. Merci de réessayer.", true);
@@ -59,7 +59,7 @@ function checkScribe(event, action, SARAH, callback) {
 }
 
 
-function decodeScribe(phrase, callback) {
+function decodeScribe(phrase, SARAH, callback) {
 	console.log ("Phrase: " + phrase);
 	// le code qui suit vient directement de la doc wiki de JPEncausse
 
@@ -79,7 +79,7 @@ function decodeScribe(phrase, callback) {
 
 	// on peut maintenant s'occuper des mots qui sont recherchés
 	search = match[1];
-	return query_wikipedia(search, callback);
+	return query_wikipedia(search, SARAH, callback);
 }
 
 
@@ -92,7 +92,7 @@ function decodeScribe(phrase, callback) {
 var re = /^(.*?)[.?!]\s*/
 var rp = /<\/?[^>]+(>|$)/g
 var ex = /^REDIRECT (\w+)\s*/g
-var query_wikipedia = function(search, callback){
+var query_wikipedia = function(search, SARAH, callback){
 	
 	console.log("Query Wikipedia: " + search);
 	

@@ -1,0 +1,51 @@
+<grammar version="1.0" xml:lang="fr-FR" mode="voice" root="rule_liste_des_courses_scribe" xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
+<rule id="rule_liste_des_courses_scribe" scope="public">
+
+	<tag>out.action=new Object();</tag>
+
+	<item>Sarah
+		<one-of>
+			<item>
+				<one-of>
+					<item>je veux acheter</item>
+					<item>rappelle-moi d'acheter </item>
+					<item>je n'ai plus de </item>
+				</one-of>
+				<ruleref special="GARBAGE" />
+				<tag>out.action.action="achat";</tag> 
+			</item>
+			<item>
+				<one-of>
+					<item> supprime</item>
+					<item>retire</item>
+					<item>enlève</item>
+				</one-of>
+				<ruleref special="GARBAGE" />
+				de la liste
+				<item repeat="0-1"> des courses</item>
+				<tag>out.action.action="del"</tag> 
+			</item>
+			
+			<item> qu'y a t il dans la liste 
+				<item repeat="0-1"> des courses</item>
+				<tag>out.action.action="read"</tag>
+			</item>
+			<item>
+				<one-of>
+					<item> vide</item>
+					<item>supprime</item>
+					<item>nettoie</item>
+				</one-of>
+				<item repeat="0-1">toute</item>
+				la liste
+				<item repeat="0-1"> des courses</item>
+				<tag>out.action.action="empty"</tag>
+			</item>
+		</one-of>
+		
+	</item>
+
+	<tag>out.action._attributes.uri="http://127.0.0.1:8080/sarah/scribe_liste_des_courses";</tag>
+
+</rule>
+</grammar>

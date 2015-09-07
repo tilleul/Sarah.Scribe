@@ -1,6 +1,7 @@
 var __nircmd = __dirname + '/bin/nircmd.exe ';
 var say=[];
 var maConfig;
+var v4=false;
 
 // events names
 TIME_ELAPSED = 'TIME_ELAPSED';
@@ -43,20 +44,21 @@ var SARAH_speak_queue = 0;
 
 /////////////// GESTION DU MICRO ON/OFF
 
-function microOFF(SARAH_local, callback) {
-	microMute(1, SARAH_local, callback);
+function microOFF(callback) {
+	microMute(1, callback);
 }
-function microON(SARAH_local, callback) {
-	microMute(0, SARAH_local, callback);
+function microON(callback) {
+	microMute(0, callback);
 }
 
-function microMute(mute, SARAH_local, callback, force) {
+function microMute(mute, callback, force) {
 //	console.log("MICRO ON:" + micro_ON);
 	var ask_micro_on = (mute==0); // est-ce qu'on demande d'allumer le micro ?
 //	console.log("ASK MICRO ON:" + ask_micro_on);
 	// pas nécessaire d'appeler nircmd si le micro est déjà allumé/éteint ... sauf si on force ...
 	if (typeof force === 'undefined' && micro_ON == ask_micro_on) {
-		return callback();
+		if (typeof callback !== 'undefined') callback();
+		return;
 	}
 
 	// surtout ne pas attendre que le process soit fini, on considère que le micro changera bel et bien d'état ...
@@ -78,8 +80,15 @@ var _hookScribe = undefined;
 // permet de rendre sourd Sarah le temps qu'on recoive la reco de Google
 // ce qui évite à Sarah de lancer des grammaires
 function SarahEcoute(listen, callback) {
-	sarahConfig = SARAH_scribe.ConfigManager.getConfig().http;
-	var url_client_sarah = sarahConfig.remote + "/?listen=" + listen;
+	/*if (v4) {
+		if (typeof callback !== 'undefined') return callback(); else return;
+	}*/
+	if (v4) sarahConfig = Config.http;
+	else sarahConfig = SARAH_scribe.ConfigManager.getConfig().http;
+	
+	var url_client_sarah;
+	if (v4) url_client_sarah = sarahConfig.remote + "/?context=" + ( listen ? 'default': '');
+	else url_client_sarah = sarahConfig.remote + "/?listen=" + listen;
 	var request = require('request');
 
 	request(url_client_sarah, function(err, response) {
@@ -123,7 +132,7 @@ function ScribeAskMe(question, reponses, callback, options) {
 		if (typeof reponses[i].match_number === 'undefined') reponses[i].match_number=0; // par défaut
 		if (typeof reponses[i].answer === 'undefined') reponses[i].answer=i+1; // par défaut
 	}
-	console.log(options.timeout);
+	//console.log(options.timeout);
 	startAskMe(question, reponses,options,callback);
 }
 
@@ -361,7 +370,7 @@ function _ScribeSpeak(tts, callback, SARAH_local) {
 				// début de la synthèse ...
 				// environ 6 secondes pour 3000+ caractères
 				// minimum 1 secondes pour une centaine de car.
-				pause = 800 + (tts.length>1000 ? (tts.length*2) : 0);
+				pause = maConfig.pause_minimale_avant_synthese + (tts.length>1000 ? (tts.length*2) : 0);
 				timeout += pause;
 			} else pause = 0;
 //console.log("timeout " + timeout);			
@@ -444,7 +453,7 @@ function scribe_speak(tts, async,  SARAH) {
 	}
 	
 	browserAbort();
-	microOFF(SARAH, function() {
+	microOFF(function() {
 		//browserStart();
 		talk();
 	});		
@@ -458,7 +467,8 @@ function talk () {
 	tts=tts_queue[0].tts;
 	console.log("Scribe Speak: " + tts);
 	var request = require('request');
-	sarahConfig = SARAH.ConfigManager.getConfig().http;
+	if (v4) sarahConfig = Config.http;
+	else sarahConfig = SARAH_scribe.ConfigManager.getConfig().http;
 	// pour pouvoir éteindre le micro au bon moment, on doit forcer la synchro de la voix
 	var url = sarahConfig.remote + "?tts=" + encodeURI(tts) + "&sync=true"; //(async==true ? "&sync=true" : "");
 //	console.log("URL: " + url);
@@ -468,7 +478,7 @@ function talk () {
 		cb = tts_queue[0].callback;
 		tts_queue.shift();
 		if (tts_queue.length==0) {
-			microON(SARAH, function() {
+			microON(function() {
 				// rien ?
 				if (typeof cb === 'function') return cb();
 			});		
@@ -491,15 +501,14 @@ function pickOne(tts) {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-exports.action = function(data, callback, config_local, SARAH_local){
+exports.action = function(data, callback, config, SARAH){
 
-	
-	if (typeof SARAH_local !== "undefined" ) {
-		Config = config_local;
-		SARAH = SARAH_local;
-	}
-	
-	maConfig = Config.modules.scribe;
+	/*if (typeof Config === "undefined" ) {
+		var Config = config_local;
+		var SARAH = SARAH_local;
+	}*/
+//	console.log(SARAH);
+	maConfig = config.modules.scribe;
 
 	var util = require('util');
 	
@@ -540,12 +549,13 @@ exports.action = function(data, callback, config_local, SARAH_local){
 	callback();
 }
 
-exports.init = function(SARAH_local) {
-	if (typeof SARAH_local !== "undefined" ) {
-		SARAH = SARAH_local;
-	}
+exports.init = function(SARAH) {
+//console.log(Config);
+	if (typeof Config === "undefined" ) {
+		//var SARAH = SARAH_local;
+	} else v4=true;
 	
-	
+console.log('V4: ' + v4);	
 	
 SARAH.context.scribe = {
 	'compteur': 0,
@@ -574,7 +584,8 @@ var https = require('https');
 var express = require('express');
 var util = require('util');
 
-maConfig = SARAH.ConfigManager.getConfig().modules.scribe;
+if (v4) maConfig = Config.modules.scribe;
+else maConfig = SARAH.ConfigManager.getConfig().modules.scribe;
 
 // surcharge de speak (allume/éteint le micro pendant que Sarah parle afin que Chrome ne capte pas l'audio)
 if (maConfig.speak_surcharge==true) exports.speak = scribe_speak; 
@@ -583,6 +594,8 @@ SARAH.ScribeSpeak = _ScribeSpeak;
 SARAH.ScribeAskMe = ScribeAskMe;
 SARAH.SarahEcoute = SarahEcoute;
 
+// on s'assure que le micro est allumé ...
+microMute(0, undefined,true);
 
 // port HTTPS -- à changer selon les ports disponibles
 var port_https = maConfig.port_https;
@@ -648,7 +661,8 @@ app.get('/sarah', function(req, res){
 		console.log(msg);
 		if (typeof req.query.force !=='undefined') params.force = req.query.force;
 		
-		sarahConfig = SARAH.ConfigManager.getConfig().http;
+		if (v4) sarahConfig = Config.http;
+		else sarahConfig = SARAH.ConfigManager.getConfig().http;
 		var url_serveur_sarah = "http://" + sarahConfig.ip + ":" + sarahConfig.port + "/sarah/scribe";
 		request({ 
 			url : url_serveur_sarah,

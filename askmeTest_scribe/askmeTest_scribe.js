@@ -2,16 +2,16 @@ var ScribeAskMe;
 var ScribeSpeak;
 var maConfig;
 
-exports.action = function(data, callback, config_local, SARAH_local){
-	if (typeof SARAH_local !== "undefined" ) {
-		Config = config_local;
-		SARAH = SARAH_local;
-	}
+exports.action = function(data, callback, config, SARAH){
+	/*if (typeof Config === "undefined" ) {
+		var Config = config_local;
+		var SARAH = SARAH_local;
+	}*/
 
 	ScribeAskMe = SARAH.ScribeAskMe;
 	ScribeSpeak = SARAH.ScribeSpeak;
 	
-	maConfig = Config.modules.askmeTest_scribe;
+	maConfig = config.modules.askmeTest_scribe;
 
 
 	if (data.action == "couleur") {
@@ -23,10 +23,10 @@ exports.action = function(data, callback, config_local, SARAH_local){
 	callback();
 }
 
-exports.init = function(SARAH_local) {
-	if (typeof SARAH_local !== "undefined" ) {
-		SARAH = SARAH_local;
-	}
+exports.init = function(SARAH) {
+	/*if (typeof Config === "undefined" ) {
+		var SARAH = SARAH_local;
+	}*/
 	
 }
 
@@ -111,7 +111,7 @@ function askAge(prenom, callback) {
 				else if (age < 120) msg += "Vraiment ? Je suis impressionée !";
 				else msg += "Je crois que tu me fais une blague !";
 				
-				ScribeSpeak(msg, function() {askAnimalOwn(prenom, age, callback) });
+				ScribeSpeak(msg, function() {callback(); });
 				
 			}
 			else if (answer==false) {

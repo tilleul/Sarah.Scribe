@@ -24,19 +24,19 @@ var longest_idx = -1;
 var token;
 var cpt_initial;
 
-exports.action = function(data, callback, config_local, SARAH_local){
+exports.action = function(data, callback, config, SARAH){
 	var util = require('util');
 	include("rimes.js");
 
 	// récupération de tous les sons
 	sons_keys = Object.keys(sons);
 	
-	if (typeof SARAH_local != 'undefined') {
-		Config = config_local;
-		SARAH = SARAH_local;
-	}
+	/*if (typeof Config === 'undefined') {
+		var Config = config_local;
+		var SARAH = SARAH_local;
+	}*/
 	
-	maConfig = Config.modules.poil_au_doigt_scribe;
+	maConfig = config.modules.poil_au_doigt_scribe;
 	
 
 	console.log("Poil_Au_Doigt_SCRIBE CALL LOG: " + util.inspect(data, { showHidden: true, depth: null }));
@@ -47,7 +47,9 @@ exports.action = function(data, callback, config_local, SARAH_local){
 			//SARAH.context.scribe.microON(SARAH);
 			// on la rend sourde
 			
+			/*
 			sarahConfig = SARAH.ConfigManager.getConfig().http;
+			
 			var url_client_sarah = sarahConfig.remote + "/?listen=false";
 			var request = require('request');
 
@@ -56,13 +58,14 @@ exports.action = function(data, callback, config_local, SARAH_local){
 					// juste pour info mais sinon on s'en fiche un peu ...
 					res.write ("Erreur: " + err);
 					callback({'tts':"Erreur lors de la connexion au client. Le jeu est annulé."});
-				} else {
+				} else {*/
 					// valeur initiale du compteur ...
+				SARAH.context.scribe.SarahEcoute(false,function() {
 					cpt_initial = SARAH.context.scribe.compteur;
 					console.log(cpt_initial);
-					token = setInterval(function() {checkScribe(SARAH, Config)}, 100);
-				}
-			});
+					token = setInterval(function() {checkScribe(SARAH)}, 100);
+				});
+			//});
 			
 			// on appelle le callback pour éviter le timeout entre le client et le serveur
 			callback();
@@ -71,10 +74,11 @@ exports.action = function(data, callback, config_local, SARAH_local){
 }
 
 
-exports.init = function(SARAH_local){
-	if (typeof SARAH_local !== 'undefined') {
-		SARAH = SARAH_local;
-	}
+exports.init = function(SARAH){
+	custom='custom.ini';
+	if (typeof Config === 'undefined') {
+		//var SARAH = SARAH_local;
+	} else custom='client/custom.ini';
 
 	SARAH.context.poil_au_doigt_scribe = {
 		'Sarah_name' : 'Sarah'
@@ -83,7 +87,7 @@ exports.init = function(SARAH_local){
 	
 	// nom réel de SARAH, repris du custom.ini
 	var fs = require("fs");
-	fs.readFileSync("custom.ini").toString().split('\n').forEach(function (line) { 
+	fs.readFileSync(custom).toString().split('\n').forEach(function (line) { 
 		line = line.toString().replace(/[\n\r\t]/g, '');
 		p = line.indexOf('name=');
 		if (p === 0) {
@@ -156,6 +160,8 @@ function checkScribe(SARAH) {
 					SARAH.ScribeSpeak("D'accord j'arrête, poil " + poils["ette"][n1] + ", pas besoin de s'énerver, poil " + poils["é"][n2] + " !", function() {
 						//SARAH.context.scribe.microON(SARAH);
 						// on guérit Sarah de sa surdité
+						SARAH.context.scribe.SarahEcoute(true);
+						/*
 						sarahConfig = SARAH.ConfigManager.getConfig().http;
 						var url_client_sarah = sarahConfig.remote + "/?listen=true";
 						var request = require('request');
@@ -165,7 +171,7 @@ function checkScribe(SARAH) {
 								// juste pour info mais sinon on s'en fiche un peu ...
 								res.write ("Erreur: " + err);
 							}
-						});				
+						});				*/
 					});
 				} else {
 					// rien d'autre ?

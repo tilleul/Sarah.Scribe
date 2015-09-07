@@ -17,6 +17,7 @@
 			"pause_trois_petits_points": 0,
 			"pause_point": 1250,
 			"pause_par_chiffre": 300,
+			"pause_minimale_avant_synthese":800,
 			"tests_vocaux": false
 			
 		}

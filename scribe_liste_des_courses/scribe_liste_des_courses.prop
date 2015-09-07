@@ -1,0 +1,9 @@
+{
+	"modules" : { 
+		"scribe_liste_des_courses"  : {
+			"description": "Liste des courses avec Scribe",
+			"version": "1.0",
+			"timeout_msec": 10000
+		}
+	}
+}

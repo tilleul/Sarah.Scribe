@@ -21,11 +21,11 @@ function hasNumbers(t) {
 	return /\d/.test(t);
 }
 
-exports.action = function(data, callback, config_local, SARAH_local){
-	if (typeof SARAH_local != 'undefined') {
+exports.action = function(data, callback, config, SARAH){
+	/*if (typeof Config === 'undefined') {
 		Config = config_local;
 		SARAH = SARAH_local;
-	}
+	}*/
 
 	SCRIBE = SARAH.context.scribe;
 	ScribeAskMe = SARAH.ScribeAskMe;
@@ -35,7 +35,7 @@ exports.action = function(data, callback, config_local, SARAH_local){
 	PARTIAL_RECO = SARAH.context.scribe.PARTIAL_RECO;
 	TIME_ELAPSED = SARAH.context.scribe.TIME_ELAPSED;
 	
-	maConfig = Config.modules.animaux_scribe;
+	maConfig = config.modules.animaux_scribe;
 	
 	var util = require('util');
 	console.log("animaux_SCRIBE CALL LOG: " + util.inspect(data, { showHidden: true, depth: null }));
@@ -54,16 +54,17 @@ exports.action = function(data, callback, config_local, SARAH_local){
 			SCRIBE.hook("TIME_ELAPSED");
 		},5000);
 	}
-	else beginGame(true);
+	else beginGame(SARAH, true);
 	
 	// on appelle le callback pour éviter le timeout entre le client et le serveur
 	callback();
 }
 
-exports.init = function(SARAH_local){
-	if (typeof SARAH_local !== 'undefined') {
-		SARAH = SARAH_local;
-	}
+exports.init = function(SARAH){
+	custom='custom.ini';
+	if (typeof Config === 'undefined') {
+		//var SARAH = SARAH_local;
+	} else custom='client/custom.ini';
 
 	SARAH.context.animaux_scribe = {
 		'Sarah_name' : 'Sarah'
@@ -72,7 +73,7 @@ exports.init = function(SARAH_local){
 	
 	// nom réel de SARAH, repris du custom.ini
 	var fs = require("fs");
-	fs.readFileSync("custom.ini").toString().split('\n').forEach(function (line) { 
+	fs.readFileSync(custom).toString().split('\n').forEach(function (line) { 
 		line = line.toString().replace(/[\n\r\t]/g, '');
 		p = line.indexOf('name=');
 		if (p === 0) {
@@ -634,7 +635,7 @@ if (bete=='') return [""];
 
 
 
-function beginGame(firstTime) {
+function beginGame(SARAH, firstTime) {
 	ScribeSpeak(( firstTime ? "D'accord. Je suis très douée à ce jeu car" : "") + " je connais " + animaux_cnt + " animaux différents ! " + 
 				"Répondez à mes questions par oui ou par non . " +
 	     		"Pour arrêter de jouer dites simplement " + SARAH.context.animaux_scribe.Sarah_name + " je ne joue plus !", 

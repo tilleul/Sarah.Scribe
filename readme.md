@@ -5,12 +5,25 @@ PLUGIN: SCRIBE
 - Toute phrase prononcée dans le micro est à la fois interprétée par Sarah (et ses grammaires XML) et la page HTTPS.
 - La page HTTPS envoie au plugin Scribe tout ce qu'elle reconnait comme mots (y compris durant la phase de reconnaissance "partielle").
 - Le plugin Scribe offre des facilités pour utiliser ce que Google a reconnu comme phrase afin d'exploiter Google dans des plugins tiers.
-- En bonus, le plugin Scribe écrit dans une zone de la page HTTPS quel est le plugin actif mais aussi ce que Sarah a dit en surlignant les mots qui sont prononcés au fur et à mesure (le timing de cette partie est à régler indépendamment et est totalement expérimental) et en animant un petit visage formé de smileys ... :-)
+- En bonus, le plugin Scribe permet d'écrire dans une zone de la page HTTPS quel est le plugin actif mais aussi ce que Sarah a dit en surlignant les mots qui sont prononcés au fur et à mesure (le timing de cette partie est à régler indépendamment et est totalement expérimental) et en animant un petit visage formé de smileys ... :-)
+
+Versions
+--------
+#### Version 1.0 
+- release initial
+
+#### Version 1.1
+- correction de quelques bugs
+- enfin compatible avec la v4
+- la v4 ne supporte pas qu'on rende Sarah sourde à tour de bras. Pour simuler cela, je change le `context` à `rien` (ceci se passe uniquement en v4, en v3 Sarah est bel et bien rendue sourde sans changer le contexte).
+- rajout du paramètre de config `pause_minimale_avant_synthese`
+- nouveau plugin Liste Des Courses ! (voir plus bas)
 
 Prérequis
 ---------
-- Sarah v3 (j'ai mis du code compatible v4 mais je n'ai pas testé)
+- Sarah v3 OU v4
 - Google Chrome en dernière version
+- une connexion internet
 
 Installation
 ------------
@@ -21,19 +34,20 @@ Installation
 5. confirmez l'exception de sécurité
 6. au besoin confirmez l'utilisation du micro (cette étape ne sera plus jamais demandée car on est en HTTPS)
 7. dans Chrome, appuyez sur ALT-F pour ouvrir le menu de Chrome, puis choisissez `Paramètres` (5e avant la fin)
-8. allez tout en bas de la page des Paramètres et cliquez sur `Afficher les paramètres avancés`
-9. cliquez sur le bouton `Gérer les certificats' dans la section HTTPS/SSL (vers la fin)
-10. choisissez l'onglet `autorités de certification RACINES de confiance`
-11. cliquez sur le bouton `importer` puis sur le bouton `suivant`, puis sur le bouton `parcourir`
-12. dans la fenêtre qui s'ouvre choisissez `Certificats PKCS#7` dans la liste déroulante en bas à droite (au dessus du bouton `ouvrir`)
-13. sélectionnez le fichier `sarah_chrome.p7b` qui est dans le répertoire du plugin et cliquez sur le bouton `ouvrir`
-14. cliquez sur `suivant` deux fois, puis sur `terminer`
+8. Dans la section "Au démarrage", choisissez "Ouvrir la page Nouvel Onglet" pour éviter d'avoir deux fois la page HTTPS ouverte entre deux redémarrages de Chrome.
+9. Ensuite, allez tout en bas de la page des Paramètres et cliquez sur `Afficher les paramètres avancés`
+10. cliquez sur le bouton `Gérer les certificats' dans la section HTTPS/SSL (vers la fin)
+11. choisissez l'onglet `autorités de certification RACINES de confiance`
+12. cliquez sur le bouton `importer` puis sur le bouton `suivant`, puis sur le bouton `parcourir`
+13. dans la fenêtre qui s'ouvre choisissez `Certificats PKCS#7` dans la liste déroulante en bas à droite (au dessus du bouton `ouvrir`)
+14. sélectionnez le fichier `sarah_chrome.p7b` qui est dans le répertoire du plugin et cliquez sur le bouton `ouvrir`
+15. cliquez sur `suivant` deux fois, puis sur `terminer`
 
-Les étapes 7 à 14 ne sont à effectuer qu'une seule fois et permettent que Chrome n'émette plus d'avertissement de sécurité (étape 5) la prochaine fois que vous lancerez Sarah
+Les étapes 9 à 15 ne sont à effectuer qu'une seule fois et permettent que Chrome n'émette plus d'avertissement de sécurité (étape 5) la prochaine fois que vous lancerez Sarah
 
 Plugins Exemples
 ----------------
-Copiez chaque répertoire finissant par `_scribe` dans le répertoire `plugins` de Sarah pour bénéficier de plugins exemples utilisant le Scribe.
+Copiez les répertoires finissant par `_scribe` ou commençant par `scribe_` dans le répertoire `plugins` de Sarah pour bénéficier de plugins exemples utilisant le Scribe.
 
 Pour tous les plugins exemple, n'hésitez pas à voir comment Google interprète ce que vous dites. Vous verrez également Sarah parler. :-)
 
@@ -103,8 +117,31 @@ Dites:
 
 et Sarah fait la recherche et vous lit le premier paragraphe wikipedia correspondant.
 
+#### Liste des courses
+Ce plugin gère une liste de courses simple
+Pour ajouter un article à la liste, dites:
+	- Sarah je veux acheter (quelque chose)
+	- Sarah je n'ai plus de (quelque chose)
+	- Sarah rappelle-moi d'acheter (quelque chose)
 
+Pour supprimer un article, dites
+	- Sarah supprime (quelque chose) de la liste (des courses)
+	- Sarah retire (quelque chose) de la liste (des courses)
+	- Sarah enlève (quelque chose) de la liste (des courses)
 
+Sarah refusera de supprimer les articles si vous n'êtes pas assez spécifique. Ce sera le cas si vous dites "Sarah supprime les chips de la liste" alors que la liste contient des "chips au sel" et des "chips au paprika".
+	
+Pour vider toute la liste, dites
+	- Sarah vide (toute) la liste (des courses)
+	- Sarah nettoie (toute) la liste (des courses)
+	- Sarah supprime (toute) la liste (des courses)
+
+Pour savoir ce qu'il y a dans la liste, dites
+	- Sarah qu'y a t-il dans la liste ?
+	
+
+La liste est stockée dans un simple fichier texte avec une entrée par ligne.
+	
 Fonctionnalités
 ---------------
 Le plugin Scribe est composé d'une partie NodeJS et d'une page web HTTPS. La page web HTTPS discute avec Sarah/NodeJS de manière bidirectionelle:
@@ -233,7 +270,7 @@ Depuis l'interface serveur de Sarah
 - `maxReco`: nombre de reconnaissances vocales à stocker dans le paramètre `lastX` du Scribe (voir plus haut)
 - `speak_surcharge`: `true` ou `false` (défaut). Permet de surcharger la fonction `SARAH.speak()` pour qu'elle utilise systématiquement les fonctionnalités de `ScribeSpeak()`. Expérimental. Plus vraiment testé/vérifié depuis un bail. De toutes façons la surcharge ne fonctionne pas avec les `out.action._attributes.tts` qui sont dans les grammaires XML donc ca reste bancal.
 
-Les paramètres suivants permettent de régler le temps en millisecondes qu'il faut à Sarah pour prononcer une lettre ou un chiffre, le temps de pause qu'elle met après une virgule, un point d'interrogation, etc. A régler selon la voix que vous utilisez. Les préréglages fonctionnent de manière satisfaisante avec la voix de Hortense (microsoft):
+Les paramètres suivants permettent de régler le temps en millisecondes qu'il faut à Sarah pour prononcer une lettre ou un chiffre, le temps de pause qu'elle met après une virgule, un point d'interrogation, etc. A régler selon la voix que vous utilisez. Les préréglages fonctionnent de manière satisfaisante avec la voix de Hortense (Microsoft):
 - `pause_par_lettre`: 56
 - `pause_virgule`: 500
 - `pause_exclamation`: 600
@@ -243,6 +280,7 @@ Les paramètres suivants permettent de régler le temps en millisecondes qu'il fau
 - `pause_trois_petits_points`: 0
 - `pause_point`: 1250
 - `pause_par_chiffre`: 300
+- `pause_minimale_avant_synthese`: 800
 
 Enfin, ce dernier paramètre permet de faire dire à Sarah toute une série de phrase au démarrage pour vous aider à régler les différents timings précédemment cités.
 - `tests_vocaux`: `false` (défaut) ou `true`
