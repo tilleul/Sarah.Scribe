@@ -120,24 +120,24 @@ et Sarah fait la recherche et vous lit le premier paragraphe wikipedia correspon
 #### Liste des courses
 Ce plugin gère une liste de courses simple
 Pour ajouter un article à la liste, dites:
-	- Sarah je veux acheter (quelque chose)
-	- Sarah je n'ai plus de (quelque chose)
-	- Sarah rappelle-moi d'acheter (quelque chose)
+- Sarah je veux acheter (quelque chose)
+- Sarah je n'ai plus de (quelque chose)
+- Sarah rappelle-moi d'acheter (quelque chose)
 
 Pour supprimer un article, dites
-	- Sarah supprime (quelque chose) de la liste (des courses)
-	- Sarah retire (quelque chose) de la liste (des courses)
-	- Sarah enlève (quelque chose) de la liste (des courses)
+- Sarah supprime (quelque chose) de la liste (des courses)
+- Sarah retire (quelque chose) de la liste (des courses)
+- Sarah enlève (quelque chose) de la liste (des courses)
 
 Sarah refusera de supprimer les articles si vous n'êtes pas assez spécifique. Ce sera le cas si vous dites "Sarah supprime les chips de la liste" alors que la liste contient des "chips au sel" et des "chips au paprika".
 	
 Pour vider toute la liste, dites
-	- Sarah vide (toute) la liste (des courses)
-	- Sarah nettoie (toute) la liste (des courses)
-	- Sarah supprime (toute) la liste (des courses)
+- Sarah vide (toute) la liste (des courses)
+- Sarah nettoie (toute) la liste (des courses)
+- Sarah supprime (toute) la liste (des courses)
 
 Pour savoir ce qu'il y a dans la liste, dites
-	- Sarah qu'y a t-il dans la liste ?
+- Sarah qu'y a t-il dans la liste ?
 	
 
 La liste est stockée dans un simple fichier texte avec une entrée par ligne.
