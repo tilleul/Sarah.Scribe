@@ -150,15 +150,16 @@ function checkScribe(event, action, SARAH, callback) {
 		SARAH.context.scribe.hook = undefined;
 		// aurait-on trouvé ?
 		
-		
-		decodeScribe(SARAH.context.scribe.lastReco, callback);
+		if (action=="encyclo") decodeScribe(SARAH.context.scribe.lastReco, callback);
+		else decodeScribe2(SARAH.context.scribe.lastReco, callback);
 	} else if (event==TIME_ELAPSED) {
 		// timeout !
 		SARAH.context.scribe.hook = undefined;
 		// aurait-on compris autre chose ?
 		if (SARAH.context.scribe.lastPartialConfidence >= 0.7 && 
 			SARAH.context.scribe.compteurPartial>SARAH.context.scribe.compteur) 
-			decodeScribe(SARAH.context.scribe.lastPartial, callback);
+			if (action=="encyclo") decodeScribe(SARAH.context.scribe.lastPartial, callback);
+			else decodeScribe2(SARAH.context.scribe.lastPartial, callback);
 		else {
 			SARAH.context.scribe.activePlugin('aucun (Wikiepedia)');
 			ScribeSpeak("Désolé je n'ai pas compris. Merci de réessayer.", true);
